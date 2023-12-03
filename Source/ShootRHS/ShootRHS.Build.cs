@@ -9,5 +9,9 @@ public class ShootRHS : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		
+		PrivateDependencyModuleNames.AddRange(new string[] {});
+		
+		PublicIncludePaths.AddRange(new string[] {"ShootRHS/Public/Player"});
 	}
 }

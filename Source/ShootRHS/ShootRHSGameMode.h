@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "ShootRHSGameMode.generated.h"
 
+
 UCLASS(minimalapi)
 class AShootRHSGameMode : public AGameModeBase
 {

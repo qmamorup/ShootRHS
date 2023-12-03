@@ -1,15 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ShootRHSGameMode.h"
-#include "ShootRHSCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Player/ShootRHSBaseCharacter.h"
+#include "Player/ShootRHSPlayerController.h"
 
 AShootRHSGameMode::AShootRHSGameMode()
 {
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPersonCPP/Blueprints/ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+	DefaultPawnClass = AShootRHSBaseCharacter::StaticClass();
+	PlayerControllerClass = AShootRHSPlayerController::StaticClass();
 }
