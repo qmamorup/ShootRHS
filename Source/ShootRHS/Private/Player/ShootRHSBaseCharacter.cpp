@@ -43,6 +43,7 @@ void AShootRHSBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShootRHSBaseCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &AShootRHSBaseCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnAround", this, &AShootRHSBaseCharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShootRHSBaseCharacter::Jump);
 }
 
 void AShootRHSBaseCharacter::MoveForward(float Amount)
