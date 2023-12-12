@@ -16,7 +16,7 @@ class SHOOTRHS_API AShootRHSBaseCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	AShootRHSBaseCharacter();
+	AShootRHSBaseCharacter(const FObjectInitializer& ObjectInit);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
@@ -35,11 +35,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	bool IsRunning() const;
+
 private:
+	bool WantsToRun = false;
+	bool IsMovingForward = false;
+
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
-
-	void LookUp(float Amount);
-	void TurnAround(float Amount);
+	
+	void OnStartRunning();
+	void OnStopRunning();
 
 };

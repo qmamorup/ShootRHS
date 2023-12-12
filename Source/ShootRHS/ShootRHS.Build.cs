@@ -12,6 +12,6 @@ public class ShootRHS : ModuleRules
 		
 		PrivateDependencyModuleNames.AddRange(new string[] {});
 		
-		PublicIncludePaths.AddRange(new string[] {"ShootRHS/Public/Player"});
+		PublicIncludePaths.AddRange(new string[] {"ShootRHS/Public/Player", "ShootRHS/Public/Components"});
 	}
 }

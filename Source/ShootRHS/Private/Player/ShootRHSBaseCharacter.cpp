@@ -5,9 +5,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/RHSCharacterMovementComponent.h"
 
 // Sets default values
-AShootRHSBaseCharacter::AShootRHSBaseCharacter()
+AShootRHSBaseCharacter::AShootRHSBaseCharacter(const FObjectInitializer& ObjectInit) : Super(ObjectInit.SetDefaultSubobjectClass<URHSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -44,14 +45,32 @@ void AShootRHSBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	PlayerInputComponent->BindAxis("LookUp", this, &AShootRHSBaseCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnAround", this, &AShootRHSBaseCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShootRHSBaseCharacter::Jump);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AShootRHSBaseCharacter::OnStartRunning);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &AShootRHSBaseCharacter::OnStopRunning);
 }
 
 void AShootRHSBaseCharacter::MoveForward(float Amount)
 {
+	IsMovingForward = Amount > 0.0f;
 	AddMovementInput(GetActorForwardVector(), Amount);
 }
 
 void AShootRHSBaseCharacter::MoveRight(float Amount)
 {
 	AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void AShootRHSBaseCharacter::OnStartRunning()
+{
+	WantsToRun = true;
+}
+
+void AShootRHSBaseCharacter::OnStopRunning()
+{
+	WantsToRun = false;
+}
+
+bool AShootRHSBaseCharacter::IsRunning() const 
+{
+	return WantsToRun && IsMovingForward && !GetVelocity().IsZero();
 }
