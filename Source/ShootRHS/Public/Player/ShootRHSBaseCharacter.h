@@ -8,6 +8,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class URHSHealthComponent;
+class UTextRenderComponent;
 
 UCLASS()
 class SHOOTRHS_API AShootRHSBaseCharacter : public ACharacter
@@ -24,6 +26,12 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	URHSHealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	UTextRenderComponent* HealthTextComponent;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
