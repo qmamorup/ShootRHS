@@ -9,6 +9,8 @@
 #include "Components/RHSHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
+
 // Sets default values
 AShootRHSBaseCharacter::AShootRHSBaseCharacter(const FObjectInitializer& ObjectInit) : Super(ObjectInit.SetDefaultSubobjectClass<URHSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -35,7 +37,6 @@ void AShootRHSBaseCharacter::BeginPlay()
 
 	check(HealthComponent);
 	check(HealthTextComponent);
-	
 }
 
 // Called every frame
@@ -46,7 +47,10 @@ void AShootRHSBaseCharacter::Tick(float DeltaTime)
 	const auto Health = HealthComponent->GetHealth();
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 
+	TakeDamage(0.1f, FDamageEvent{}, Controller, this);
+
 }
+
 
 // Called to bind functionality to input
 void AShootRHSBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -2,6 +2,7 @@
 
 
 #include "Components/RHSHealthComponent.h"
+#include "GameFramework/Actor.h"
 
 URHSHealthComponent::URHSHealthComponent()
 {
@@ -13,6 +14,17 @@ void URHSHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Health = MaxHealth;
+
+	AActor* ComponentOwner = GetOwner();
+	if (ComponentOwner)
+	{
+		ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &URHSHealthComponent::OnTakeAnyDamage);
+	}
 }
 
+void URHSHealthComponent::OnTakeAnyDamage(
+	AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	Health -= Damage;
+}
 
