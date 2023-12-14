@@ -4,6 +4,8 @@
 #include "Components/RHSHealthComponent.h"
 #include "GameFramework/Actor.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
+
 URHSHealthComponent::URHSHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -26,5 +28,6 @@ void URHSHealthComponent::OnTakeAnyDamage(
 	AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	Health -= Damage;
+	UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage);
 }
 
