@@ -6,8 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "RHSHealthComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDeath)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float)
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTRHS_API URHSHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -17,9 +19,14 @@ public:
 
 	float GetHealth() const { return Health; }
 
-protected:
+	UFUNCTION(BlueprintCallable)
+	bool IsDead() const { return Health <= 0.0f; }
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Health", meta=(ClampMin = "0.0", ClampMax = "1000.0"))
+	FOnDeath OnDeath;
+	FOnHealthChanged OnHealthChanged;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta=(ClampMin = "0.0", ClampMax = "1000.0"))
 	float MaxHealth = 100.0f;
 	
 	virtual void BeginPlay() override;

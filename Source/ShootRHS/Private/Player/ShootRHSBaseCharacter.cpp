@@ -9,7 +9,7 @@
 #include "Components/RHSHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 
-DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
 // Sets default values
 AShootRHSBaseCharacter::AShootRHSBaseCharacter(const FObjectInitializer& ObjectInit) : Super(ObjectInit.SetDefaultSubobjectClass<URHSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -37,17 +37,23 @@ void AShootRHSBaseCharacter::BeginPlay()
 
 	check(HealthComponent);
 	check(HealthTextComponent);
+	check(GetCharacterMovement());
+
+	OnHealthChanged(HealthComponent->GetHealth());
+	HealthComponent->OnDeath.AddUObject(this, &AShootRHSBaseCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddUObject(this, &AShootRHSBaseCharacter::OnHealthChanged);
 }
+
+void AShootRHSBaseCharacter::OnHealthChanged(float Health)
+{
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
 
 // Called every frame
 void AShootRHSBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	const auto Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-	
-
 }
 
 
@@ -99,6 +105,16 @@ float AShootRHSBaseCharacter::GetMovementDirection() const
 	const auto VelocityNormal = GetVelocity().GetSafeNormal();
 	const auto AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
 	const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
-	const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
-	return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
+	return FMath::RadiansToDegrees(AngleBetween) * FMath::Sign(CrossProduct.Z);
+}
+
+void AShootRHSBaseCharacter::OnDeath()
+{
+	UE_LOG(LogBaseCharacter, Display, TEXT("Player %s id dead"), *GetName());
+
+	PlayAnimMontage(DeathAnimMontage);
+
+	GetCharacterMovement()->DisableMovement();
+
+	SetLifeSpan(5.0f);
 }

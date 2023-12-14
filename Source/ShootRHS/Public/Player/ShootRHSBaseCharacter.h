@@ -21,17 +21,20 @@ public:
 	AShootRHSBaseCharacter(const FObjectInitializer& ObjectInit);
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	URHSHealthComponent* HealthComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathAnimMontage;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,4 +61,7 @@ private:
 	
 	void OnStartRunning();
 	void OnStopRunning();
+
+	void OnDeath();
+	void OnHealthChanged(float Health);
 };
