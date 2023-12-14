@@ -3,6 +3,8 @@
 
 #include "Components/RHSHealthComponent.h"
 #include "GameFramework/Actor.h"
+#include "Dev/RHSFireDamageType.h"
+#include "Dev/RHSIceDamageType.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
 
@@ -29,5 +31,17 @@ void URHSHealthComponent::OnTakeAnyDamage(
 {
 	Health -= Damage;
 	UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage);
+
+	if (DamageType)
+	{
+		if (DamageType->IsA<URHSFireDamageType>())
+		{
+			UE_LOG(LogHealthComponent, Display, TEXT("So hoooot !!!"));
+		}
+		else if (DamageType->IsA<URHSIceDamageType>())
+		{
+			UE_LOG(LogHealthComponent, Display, TEXT("So coooold !!!"));
+		}
+	}
 }
 
