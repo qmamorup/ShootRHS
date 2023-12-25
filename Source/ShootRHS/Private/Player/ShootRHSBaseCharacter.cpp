@@ -43,6 +43,8 @@ void AShootRHSBaseCharacter::BeginPlay()
 	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &AShootRHSBaseCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AShootRHSBaseCharacter::OnHealthChanged);
+
+	LandedDelegate.AddDynamic(this, &AShootRHSBaseCharacter::OnGroundLanded);
 }
 
 void AShootRHSBaseCharacter::OnHealthChanged(float Health)
@@ -122,4 +124,16 @@ void AShootRHSBaseCharacter::OnDeath()
 	{
 		Controller->ChangeState(NAME_Spectating);
 	}
+}
+
+void AShootRHSBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+	const auto FallVelocityZ = -GetCharacterMovement()->Velocity.Z;
+	UE_LOG(LogBaseCharacter, Display, TEXT("On landed: %f"), FallVelocityZ);
+
+	if(FallVelocityZ<-LandedDamageVelocity.X) return;
+
+	const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+	UE_LOG(LogBaseCharacter, Display, TEXT("FinalDamage: %f"), FinalDamage);
+	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
