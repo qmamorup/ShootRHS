@@ -8,6 +8,7 @@
 #include "Components/RHSCharacterMovementComponent.h"
 #include "Components/RHSHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
@@ -117,4 +118,8 @@ void AShootRHSBaseCharacter::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
+	}
 }
